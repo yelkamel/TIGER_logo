@@ -1,0 +1,78 @@
+var ang : int := 0
+
+function forward(x : int, origin : point, degre : int) : point =
+  let
+    var dst : point := point {x = 0, y = 0}
+  in
+    dst.x := origin.x + (x * cos(ang) / 1000000);
+    dst.y := origin.y + (x * sin(ang) / 1000000);
+    draw_line(origin, dst);
+    origin.x := dst.x;
+    origin.y := dst.y;
+    origin
+  end
+
+
+  function actud(dir :string, angle : int) =
+    (
+      if (dir = "left") then
+	ang := ang + angle
+      else
+	ang := ang - angle
+    )
+
+  function takenb(lu : string) : int =
+    let
+      var nb : int := 0
+    in
+      while (lu = " ")
+      do
+	lu := getchar();
+      while ((lu = "0") | (lu = "1") | (lu = "2") | (lu = "3")
+	     | (lu = "4") | (lu = "5") | (lu = "6")
+	     | (lu = "7") | (lu = "8") | (lu = "9"))
+      do
+	(
+	  nb := nb * 10;
+	  nb := nb + (ord(lu) - 48);
+	  lu := getchar()
+	);
+      nb
+    end
+
+
+  function logo(orix : int, oriy : int) =
+    let
+      var lu : string := ""
+      var tokname : string := ""
+      var angle : int := 0
+      var toknb : int := 0
+      var i : int := 0
+      var der :=
+      point
+      {
+	x = orix,
+	y = oriy
+      }
+    in
+      lu := getchar();
+      while (lu <> "")
+      do
+	(
+	  if (tokname = "right" | tokname = "left") then
+	    (
+	      angle := takenb(lu);
+	      actud(tokname, angle);
+	      tokname := ""
+	    );
+	  if (tokname = "forward") then
+	    (
+	      toknb := takenb(lu);
+	      der := forward(toknb, der, ang);
+	      tokname := ""
+	    );
+	  if (not (lu = " ") & not (lu = "\n")) then
+	    tokname := concat(tokname, lu);
+	  lu := getchar()
+	)
+    end
